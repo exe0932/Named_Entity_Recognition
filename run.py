@@ -68,22 +68,22 @@ class TrainTestPredict:
                                                     num_warmup_steps=(self.config.epochs // 10) * train_steps_per_epoch,
                                                     num_training_steps=self.config.epochs * train_steps_per_epoch)
 
-        # 画曲线图用
+        # 畫曲線圖用
         train_loss_all = []
         train_acc_all = []
         val_loss_all = []
         val_acc_all = []
 
-        # 保存最优模型用
+        # 保存最優模型用
         max_acc = 0
         for epoch in range(self.config.epochs):
-            # 画混淆矩阵用
+            # 畫混淆矩陣用
             train_truel_all = []
             train_prel_all = []
             val_truel_all = []
             val_prel_all = []
 
-            # 真实/预测/原文
+            # 真實/預測/原文
             train_true_tags = []
             train_pred_tags = []
             train_sent_data = []
@@ -96,7 +96,7 @@ class TrainTestPredict:
                 batch_token_starts = batch_token_starts.to(self.config.device)
                 batch_labels = batch_labels.to(self.config.device)
                 # print("batch_labels", batch_labels)
-                # 返回原字样
+                # 返回原字樣
                 train_sent_data.extend([[idx for idx in indices] for indices in batch_original_contents])
                 batch_masks = batch_data.gt(0)  # get padding mask
                 # print(batch_masks)
@@ -154,7 +154,7 @@ class TrainTestPredict:
             train_recall = recalls / len(train_iter)
             train_f1 = f1scores / len(train_iter)
 
-            # 画曲线图用
+            # 畫曲線圖用
             train_loss_all.append(train_loss)
             train_acc_all.append(train_acc)
 
@@ -169,7 +169,7 @@ class TrainTestPredict:
             prfs = classification_report(train_truel_all, train_prel_all)
             logging.info(f"prfs on train:\n{prfs}")
 
-            # 验证
+            # 驗證
             model.eval()
             with torch.no_grad():
                 val_true_tags = []
@@ -183,7 +183,7 @@ class TrainTestPredict:
                     batch_token_starts = batch_token_starts.to(self.config.device)
                     batch_labels = batch_labels.to(self.config.device)
 
-                    # 返回原字样
+                    # 返回原字樣
                     val_sent_data.extend([[idx for idx in indices] for indices in batch_original_contents])
                     batch_masks = batch_data.gt(0)  # get padding mask, gt(x): get index greater than x
                     label_masks = batch_labels.gt(-1)  # get padding mask, gt(x): get index greater than x
@@ -229,7 +229,7 @@ class TrainTestPredict:
             val_recall = recalls / len(val_iter)
             val_f1 = f1scores / len(val_iter)
 
-            # 画曲线图用
+            # 畫曲線圖用
             val_loss_all.append(val_loss)
             val_acc_all.append(val_acc)
 
@@ -244,7 +244,7 @@ class TrainTestPredict:
             prfs = classification_report(val_truel_all, val_prel_all)
             logging.info(f"prfs on val:\n{prfs}")
 
-            # 保存最优模型
+            # 保存最優模型
             if val_acc > max_acc:
                 max_acc = val_acc
                 torch.save(model.state_dict(), model_save_path)
@@ -252,7 +252,7 @@ class TrainTestPredict:
     def evaluate(self, pre_iter, model, device, id2label):
         model.eval()
         with torch.no_grad():
-            # 真实/预测/原文
+            # 真實/預測/原文
             pre_true_tags = []
             pre_pred_tags = []
             pre_sent_data = []
@@ -292,7 +292,7 @@ class TrainTestPredict:
         model.to(self.config.device)
 
         bert_tokenize = BertTokenizer.from_pretrained(self.config.pretrain_path).tokenize
-        # 如果要返回预标注功能，batch_size只能 = 1
+        # 如果要返回預標註功能，batch_size只能 = 1
         data_loader = data_helpers.LoadNameEntityRecognitionDataset(vocab_path=self.config.vocab_path,
                                                                     tokenizer=bert_tokenize,
                                                                     batch_size=self.config.batch_size,
