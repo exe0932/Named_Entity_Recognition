@@ -13,15 +13,15 @@ from torch.nn.utils.rnn import pad_sequence
 import torch
 import torch.nn as nn
 
-# '''导入预训练tokenizer 和 model'''
+# '''導入育訓練tokenizer 和 model'''
 # tokenizers = BertTokenizer.from_pretrained(r'D:\Unicom\competition\gitlab_test\202304\Single-disease-cerebral-infarction\pretrain_model\bert-base-chinese')
 # model = BertModel.from_pretrained(r'D:\Unicom\competition\gitlab_test\202304\Single-disease-cerebral-infarction\pretrain_model\bert-base-chinese')
 #
-# # 将句子进行分词
+# # 將句子進行分詞
 # inputs = tokenizers("Hello, my dog is cute", return_tensors="pt")
-# # 模型输出
+# # 模型輸出
 # outputs = model(**inputs)
-# # 提取输出最后一个隐藏层状态量
+# # 提取輸出最後一個隱藏層狀態量
 # last_hidden_states = outputs.last_hidden_state
 # print(last_hidden_states)
 
@@ -49,14 +49,14 @@ class BertNER(BertPreTrainedModel):
                             inputs_embeds=inputs_embeds)
         sequence_output = outputs[0]
 
-        # 去除[CLS]标签等位置，获得与label对齐的pre_label表示
+        # 去除[CLS]標籤等位置，獲得與label對齊的pre_label表示
         origin_sequence_output = [layer[starts.nonzero().squeeze(1)]
                                   for layer, starts in zip(sequence_output, input_token_starts)]
-        # 将sequence_output的pred_label维度padding到最大长度
+        # 將sequence_output的pred_label維度padding到最大長度
         padded_sequence_output = pad_sequence(origin_sequence_output, batch_first=True)
         # dropout pred_label的一部分feature
         padded_sequence_output = self.dropout(padded_sequence_output)
-        # 得到判别值
+        # 得到判別值
         logits = self.classifier(padded_sequence_output)
         outputs = (logits,)
         if labels is not None:
