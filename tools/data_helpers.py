@@ -19,13 +19,13 @@ import six
 
 class Vocab:
     """
-    根据本地的vocab文件，构造一个词表
+    根據本地的vocab文件，構造一個詞表
     vocab = Vocab()
-    print(vocab.itos)  # 得到一个列表，返回词表中的每一个词；
-    print(vocab.itos[2])  # 通过索引返回得到词表中对应的词；
-    print(vocab.stoi)  # 得到一个字典，返回词表中每个词的索引；
-    print(vocab.stoi['我'])  # 通过单词返回得到词表中对应的索引
-    print(len(vocab))  # 返回词表长度
+    print(vocab.itos)  # 得到一個列表，返回詞表中的每一個詞；
+    print(vocab.itos[2])  # 通過索引返回得到詞表中對應的詞；
+    print(vocab.stoi)  # 得到一個字典，返回詞表中每個詞的索引；
+    print(vocab.stoi['我'])  # 通過單詞返回得到詞表中對應的索引
+    print(len(vocab))  # 返回詞表長度
     """
     UNK = '[UNK]'
 
@@ -48,17 +48,17 @@ class Vocab:
 def build_vocab(vocab_path):
     """
     vocab = Vocab()
-    print(vocab.itos)  # 得到一个列表，返回词表中的每一个词；
-    print(vocab.itos[2])  # 通过索引返回得到词表中对应的词；
-    print(vocab.stoi)  # 得到一个字典，返回词表中每个词的索引；
-    print(vocab.stoi['我'])  # 通过单词返回得到词表中对应的索引
+    print(vocab.itos)  # 得到一個列表，返回詞表中的每一個詞；
+    print(vocab.itos[2])  # 通過索引返回得到詞表中對應的詞；
+    print(vocab.stoi)  # 得到一個字典，返回詞表中每個詞的索引；
+    print(vocab.stoi['我'])  # 通過單詞返回得到詞表中對應的索引
     """
     return Vocab(vocab_path)
 
 
 def pad_sequence(sequences, batch_first=False, max_len=None, padding_value=0):
     """
-    对一个List中的元素进行padding
+    對一個List中的元素進行padding
     Pad a list of variable length Tensors with ``padding_value``
     a = torch.ones(25)
     b = torch.ones(22)
@@ -66,11 +66,11 @@ def pad_sequence(sequences, batch_first=False, max_len=None, padding_value=0):
     pad_sequence([a, b, c],max_len=None).size()
     torch.Size([25, 3])
         sequences:
-        batch_first: 是否把batch_size放到第一个维度
+        batch_first: 是否把batch_size放到第一個維度
         padding_value:
         max_len :
-                当max_len = 50时，表示以某个固定长度对样本进行padding，多余的截掉；
-                当max_len=None是，表示以当前batch中最长样本的长度对其它进行padding；
+                當max_len = 50時，表示以某個固定長度對樣本進行padding，多餘的截掉；
+                當max_len=None是，表示以當前batch中最長樣本的長度對其它進行padding；
     Returns:
     """
     if max_len is None:
@@ -91,7 +91,7 @@ def pad_sequence(sequences, batch_first=False, max_len=None, padding_value=0):
 
 def cache(func):
     """
-    本修饰器的作用是将SQuAD数据集中data_process()方法处理后的结果进行缓存，下次使用时可直接载入！
+    本修飾器的作用是將SQuAD數據集中data_process()方法處理後的結果進行緩存，下次使用時可直接載入！
     :param func:
     :return:
     """
@@ -101,12 +101,12 @@ def cache(func):
         postfix = kwargs['postfix']
         data_path = filepath.split('.')[0] + '_' + postfix + '.pt'
         if not os.path.exists(data_path):
-            logging.info(f"缓存文件 {data_path} 不存在，重新处理并缓存！")
+            logging.info(f"緩存文件 {data_path} 不存在，重新處理並緩存！")
             data = func(*args, **kwargs)
             with open(data_path, 'wb') as f:
                 torch.save(data, f)
         else:
-            logging.info(f"缓存文件 {data_path} 存在，直接载入缓存文件！")
+            logging.info(f"緩存文件 {data_path} 存在，直接載入緩存文件！")
             with open(data_path, 'rb') as f:
                 data = torch.load(f)
         return data
@@ -128,19 +128,19 @@ class LoadSingleSentenceClassificationDataset:
 
         """
 
-        :param vocab_path: 本地词表vocab.txt的路径
+        :param vocab_path: 本地詞表vocab.txt的路徑
         :param tokenizer:
         :param batch_size:
-        :param max_sen_len: 在对每个batch进行处理时的配置；
-                            当max_sen_len = None时，即以每个batch中最长样本长度为标准，对其它进行padding
-                            当max_sen_len = 'same'时，以整个数据集中最长样本为标准，对其它进行padding
-                            当max_sen_len = 50， 表示以某个固定长度符样本进行padding，多余的截掉；
-        :param split_sep: 文本和标签之前的分隔符，默认为'\t'
-        :param max_position_embeddings: 指定最大样本长度，超过这个长度的部分将本截取掉
-        :param is_sample_shuffle: 是否打乱训练集样本（只针对训练集）
-                在后续构造DataLoader时，验证集和测试集均指定为了固定顺序（即不进行打乱），修改程序时请勿进行打乱
-                因为当shuffle为True时，每次通过for循环遍历data_iter时样本的顺序都不一样，这会导致在模型预测时
-                返回的标签顺序与原始的顺序不一样，不方便处理。
+        :param max_sen_len: 在對每個batch進行處理時的配置；
+                            當max_sen_len = None時，即以每個batch中最長樣本長度為標準，對其它進行padding
+                            當max_sen_len = 'same'時，以整個數據集中最長樣本為標準，對其它進行padding
+                            當max_sen_len = 50， 表示以某個固定長度符樣本進行padding，多餘的截掉；
+        :param split_sep: 文本和標籤之前的分隔符，默認為'\t'
+        :param max_position_embeddings: 指定最大樣本長度，超過這個長度的部分將本截取掉
+        :param is_sample_shuffle: 是否打亂訓練集樣本（只針對訓練集）
+                在後續構造DataLoader時，驗證集和測試集均指定為了固定順序（即不進行打亂），修改程序時請勿進行打亂
+                因為當shuffle為True時，每次通過for循環遍歷data_iter時樣本的順序都不一樣，這會導致在模型預測時
+                返回的標籤順序與原始的順序不一樣，不方便處理。
 
         """
         self.tokenizer = tokenizer
@@ -161,8 +161,8 @@ class LoadSingleSentenceClassificationDataset:
 
     def data_process(self, filepath, only_predict=False):
         """
-        将每一句话中的每一个词根据字典转换成索引的形式，同时返回所有样本中最长样本的长度
-        :param filepath: 数据集路径
+        將每一句話中的每一個詞根據字典轉換成索引的形式，同時返回所有樣本中最長樣本的長度
+        :param filepath: 數據集路徑
         :return:
         """
         if only_predict:
@@ -170,7 +170,7 @@ class LoadSingleSentenceClassificationDataset:
             label_len = len(contents)
             tmp = [self.CLS_IDX] + [self.vocab[token] for token in self.tokenizer(filepath)]
             if len(tmp) > self.max_position_embeddings - 1:
-                tmp = tmp[:self.max_position_embeddings - 1]  # BERT预训练模型只取前512个字符
+                tmp = tmp[:self.max_position_embeddings - 1]  # BERT預訓練模型只取前512個字符
             tmp += [self.SEP_IDX]
             tensor_ = torch.tensor(tmp, dtype=torch.long)
             l = torch.tensor(int(label_len), dtype=torch.long)
@@ -188,7 +188,7 @@ class LoadSingleSentenceClassificationDataset:
                 # print("l:", l)
                 tmp = [self.CLS_IDX] + [self.vocab[token] for token in self.tokenizer(s)]
                 if len(tmp) > self.max_position_embeddings - 1:
-                    tmp = tmp[:self.max_position_embeddings - 1]  # BERT预训练模型只取前512个字符
+                    tmp = tmp[:self.max_position_embeddings - 1]  # BERT預訓練模型只取前512個字符
                 tmp += [self.SEP_IDX]
                 tensor_ = torch.tensor(tmp, dtype=torch.long)
                 l = torch.tensor(int(l), dtype=torch.long)
@@ -214,11 +214,11 @@ class LoadSingleSentenceClassificationDataset:
                                shuffle=False, collate_fn=self.generate_batch)
         if only_test:
             return test_iter
-        train_data, max_sen_len = self.data_process(train_file_path)  # 得到处理好的所有样本
+        train_data, max_sen_len = self.data_process(train_file_path)  # 得到處理好的所有樣本
         if self.max_sen_len == 'same':
             self.max_sen_len = max_sen_len
         val_data, _ = self.data_process(val_file_path)
-        train_iter = DataLoader(train_data, batch_size=self.batch_size,  # 构造DataLoader
+        train_iter = DataLoader(train_data, batch_size=self.batch_size,  # 構造DataLoader
                                 shuffle=self.is_sample_shuffle, collate_fn=self.generate_batch)
         val_iter = DataLoader(val_data, batch_size=self.batch_size,
                               shuffle=False, collate_fn=self.generate_batch)
@@ -226,7 +226,7 @@ class LoadSingleSentenceClassificationDataset:
 
     def generate_batch(self, data_batch):
         batch_sentence, batch_label = [], []
-        for (sen, label) in data_batch:  # 开始对一个batch中的每一个样本进行处理。
+        for (sen, label) in data_batch:  # 開始對一個batch中的每一個樣本進行處理。
             batch_sentence.append(sen)
             batch_label.append(label)
         # print("batch_sentence:", batch_sentence)
@@ -262,7 +262,7 @@ class LoadNameEntityRecognitionDataset(LoadSingleSentenceClassificationDataset):
                 word_lens.append(len(token))
             # print("words:", words)
             # print("words_len:", len(words))
-            # 变成单个字的列表，开头加上[CLS]
+            # 變成單個字的列表，開頭加上[CLS]
             words = ['[CLS]'] + [item for token in words for item in token] + ['[SEP]']
             # print("words_cls:", words)
             # print("words_cls_len:", len(words))
@@ -286,9 +286,9 @@ class LoadNameEntityRecognitionDataset(LoadSingleSentenceClassificationDataset):
         else:
             train_data = self.preprocess(train_word, train_label)
             val_data = self.preprocess(test_word, test_label)
-            train_iter = DataLoader(train_data, batch_size=self.batch_size,  # 构造DataLoader
+            train_iter = DataLoader(train_data, batch_size=self.batch_size,  # 構造DataLoader
                                     shuffle=self.is_sample_shuffle, collate_fn=self.generate_batch)
-            val_iter = DataLoader(val_data, batch_size=self.batch_size,  # 构造DataLoader
+            val_iter = DataLoader(val_data, batch_size=self.batch_size,  # 構造DataLoader
                                     shuffle=self.is_sample_shuffle, collate_fn=self.generate_batch)
             return train_iter, train_data, val_iter
 
@@ -314,7 +314,7 @@ class LoadNameEntityRecognitionDataset(LoadSingleSentenceClassificationDataset):
         for j in range(batch_len):
             cur_len = len(sentences[j][0])  # 79
             batch_data[j][:cur_len] = sentences[j][0]  # batch_data 101, 1068, 754, 122, 121, 3299, 123
-            # 找到有标签的数据的index（[CLS]不算）
+            # 找到有標籤的數據的index（[CLS]不算）
             label_start_idx = sentences[j][-1]  # len 78
             label_starts = np.zeros(max_len)  # len 79
             label_starts[[idx for idx in label_start_idx if idx < max_len]] = 1

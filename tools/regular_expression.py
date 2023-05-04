@@ -6,7 +6,7 @@
 
 class Regularexpression:
 
-    '''构建正则表达式'''
+    '''構建正則表達式'''
     def pattern(self):
         patterns = \
             [

@@ -15,7 +15,7 @@ from .log_helper import logger_init
 #     parser = argparse.ArgumentParser()
 #     return parser
 
-'''加载模型序要的参数'''
+'''加載模型序要的參數'''
 class ModelConfig:
     def __init__(self):
         self.project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +30,7 @@ class ModelConfig:
         self.batch_size = 1
         self.epochs = 1
         # hyper-parameter
-        self.full_fine_tuning = True  # 是否对整个BERT进行fine tuning
+        self.full_fine_tuning = True  # 是否對整個BERT進行fine tuning
         self.weight_decay = 0.01
         self.learning_rate = 3e-5
         self.clip_grad = 5

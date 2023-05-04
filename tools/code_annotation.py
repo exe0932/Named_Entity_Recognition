@@ -15,16 +15,16 @@ class ProcessingData:
         self.regular_expression = regular_expression.Regularexpression()
         config = finetuning_argparse.ModelConfig()
 
-        # 文本路径
+        # 文本路徑
         self.data_path = config.data_path
 
-        # 载入文本内容
+        # 載入文本內容
         self.texts = [i.strip() for i in open(self.data_path, encoding="utf-8") if i.strip()]
 
         print('Download Data ...')
         return
 
-    '''建立训练数据格式'''
+    '''建立訓練數據格式'''
     def build_data_format(self):
         out_list = list()
         for text in self.texts:
@@ -35,7 +35,7 @@ class ProcessingData:
                 score_entity = re.search(pattern, text)
                 # print(score_entity)
                 if score_entity:
-                    # # 打印评分实体在text中的起始位置和中止位置
+                    # # 打印評分實體在text中的起始位置和中止位置
                     # print("Start index: ", score_entity.start())
                     # print("End index: ", score_entity.end())
                     # print("Score entity: ", score_entity.group())
@@ -47,7 +47,7 @@ class ProcessingData:
         print('Build Data Format  ...')
         return out_list
 
-    '''训练集测试集划分'''
+    '''训訓練集測試集劃分'''
     def data_split(self, datasets):
         trainset, testset = list(), list()
         for i in range(len(datasets)):
@@ -58,7 +58,7 @@ class ProcessingData:
         print('Data Split  ...')
         return trainset, testset
 
-    '''标注数据bio标签代码'''
+    '''標註數據bio標籤代碼'''
     def creat_BIO(self, text, labels):
         tag_list = ['O' for i in range(len(text))]
         for start_index, end_index, key in labels:
@@ -69,7 +69,7 @@ class ProcessingData:
                 k += 1
         return tag_list
 
-    '''Bert最大长度512，用510字做切分数据'''
+    '''Bert最大長度512，用510字做切分數據'''
     def all_list(self, text, step=510):
         word_lis = list()
         for i, list_name in enumerate(text):
@@ -78,7 +78,7 @@ class ProcessingData:
             word_lis[-1].append(list_name)
         return word_lis
 
-    '''标注数据bio标签过程'''
+    '''標註數據bio標籤過程'''
     def data_preprocess(self, datasets=None, predict=None):
         if predict:
             word_lis, label_lis, all_lentexts = list(), list(), list()
