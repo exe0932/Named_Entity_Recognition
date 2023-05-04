@@ -15,18 +15,18 @@ model = run.TrainTestPredict()
 def disease_cerbral():
 
 
-    '''获取 json 资料'''
-    ''' 401 请求不到资料 格式错误'''
+    '''獲取 json 資料'''
+    ''' 401 請求不到資料 格是錯誤'''
     try:
         json_data = request.get_json()
     except:
         info = {'code': 401, 'msg': 'Failed to request data', 'data': []}
         return jsonify(info)
 
-    '''获取 json key'''
+    '''獲取 json key'''
     keys_names = tool.get_key(json_data)
-    '''将 json 资料变成批量 存成 list'''
+    '''將 json 資料變成批量 存成 list'''
     get_text = tool.get_value(json_data, keys_names)
-    ''' 定制化接口输出 '''
+    ''' 定製化接口輸出 '''
     interface = tool.get_key_value(get_text, model)
     return jsonify(interface)

@@ -6,7 +6,7 @@
 
 from flask import request, jsonify
 
-# 服务器用根目录
+# 服務氣根目錄
 # import sys
 # sys.path.append('../../')
 import argparse
