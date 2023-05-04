@@ -1,0 +1,4 @@
+## 忽略bert-base-chinese文件
+*.json
+*.bin
+*.txt
